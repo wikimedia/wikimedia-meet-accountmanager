@@ -1,16 +1,17 @@
-from flask import Flask, render_template, request
 import hashlib
-import time
 import json
+import time
+
 import requests
+from flask import Flask, render_template, request
+
 app = Flask(__name__)
-production = False
-clients = ['jitsi.meet.eqiad.wmflabs:4000']
+clients = ['http://jitsi.meet.eqiad.wmflabs:4000']
 
 def auth(password):
     time.sleep(2)
     with open('token', 'r') as f:
-        ticketmaster_token = f.read()
+        ticketmaster_token = f.read().strip()
     with open('salt', 'r') as f:
         salt = bytes(f.read(), 'utf-8')
     dk = hashlib.pbkdf2_hmac('sha256', bytes(password, 'utf-8'), salt, 100000)
@@ -28,21 +29,14 @@ def create_user():
 def create_user_post():
     if not auth(request.form['token'].strip()):
         return 'Not allowed'
-    if production:
-        for client in clients:
-            requests.post(
-                client + '/create',
-                {
-                    'user': request.form['user'],
-                    'password': request.form['password']
-                }
-            )
-        return
-    with open('users_to_create.json', 'r') as f:
-        users_to_create = json.loads(f.read())
-    users_to_create.append({'user': request.form['user'], 'password': request.form['password']})
-    with open('users_to_create.json', 'w') as f:
-        f.write(json.dumps(users_to_create))
+    for client in clients:
+        requests.post(
+            client + '/create',
+            {
+                'user': request.form['user'],
+                'password': request.form['password']
+            }
+        )
     return 'Done!'
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
