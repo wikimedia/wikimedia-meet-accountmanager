@@ -45,4 +45,4 @@ def create_user_post():
         f.write(json.dumps(users_to_create))
     return 'Done!'
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
