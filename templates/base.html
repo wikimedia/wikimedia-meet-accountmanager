@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet"
+          href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap.min.css">
+    <title>Wikimedia Meet Account Manager</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="navbar-brand" href="/create">Wikimedia Meet Accounts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/create">Create account</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/generate_token">Admin view</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container mt-3">
+    {% block content %}{% endblock %}
+
+    <hr/>
+    <a href="/">Wikimedia Meet Account Manager</a>
+    &middot;
+    <a href="https://meet.wmcloud.org" class="text-muted">
+        meet.wmcloud.org</a>
+    &middot;
+    <a href="https://phabricator.wikimedia.org/tag/wikimedia_meet/" class="text-muted">
+        report issues</a>
+</div>
+</body>
+</html>

@@ -4,7 +4,7 @@ import time
 from secrets import token_hex
 
 import requests
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 clients = ['http://jitsi.meet.eqiad.wmflabs:4000']
@@ -45,7 +45,7 @@ def gen_token():
 
 @app.route("/")
 def hello():
-    return "Hello!"
+    return redirect('/create')
 
 
 @app.route("/generate_token", methods=['GET'])
@@ -70,7 +70,7 @@ def create_user():
 def create_user_post():
     if not auth_token(request.form['token'].strip()):
         time.sleep(10)
-        return 'Not allowed'
+        return render_template('create.html', invalid_token=True)
     for client in clients:
         requests.post(
             client + '/create',
@@ -79,7 +79,7 @@ def create_user_post():
                 'password': request.form['password']
             }
         )
-    return 'Done!'
+    return render_template('success.html')
 
 
 if __name__ == "__main__":
