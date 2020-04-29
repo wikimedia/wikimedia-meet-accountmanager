@@ -58,7 +58,7 @@ def generate_token_post():
     if not auth_ticketmaster(request.form['token'].strip()):
         time.sleep(10)
         return 'Not allowed'
-    return gen_token()
+    return render_template('token_generated.html', token=gen_token())
 
 
 @app.route("/create", methods=['GET'])
