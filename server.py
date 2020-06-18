@@ -1,6 +1,7 @@
 import hashlib
 import json
 import time
+import os
 from secrets import token_hex
 
 import requests
@@ -8,14 +9,17 @@ from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 clients = ['http://jitsi.meet.eqiad.wmflabs:4000']
-tokens_file = 'tokens.json'
+current_dir = os.path.dirname(os.path.realpath(__file__))
+tokens_path = os.path.join(current_dir, 'tokens.json')
+token_path = os.path.join(current_dir, 'token')
+salt_path = os.path.join(current_dir, 'salt')
 
 
 def auth_ticketmaster(password):
     time.sleep(2)
-    with open('token', 'r') as f:
+    with open(token_path, 'r') as f:
         ticketmaster_token = f.read().strip()
-    with open('salt', 'r') as f:
+    with open(salt_path, 'r') as f:
         salt = bytes(f.read(), 'utf-8')
     dk = hashlib.pbkdf2_hmac('sha256', bytes(password, 'utf-8'), salt, 100000)
     return dk.hex() == ticketmaster_token
@@ -23,22 +27,22 @@ def auth_ticketmaster(password):
 
 def auth_token(token):
     time.sleep(2)
-    with open(tokens_file, 'r') as f:
+    with open(tokens_path, 'r') as f:
         tokens = json.loads(f.read())
     if token not in tokens:
         return False
     tokens.remove(token)
-    with open(tokens_file, 'w') as f:
+    with open(tokens_path, 'w') as f:
         f.write(json.dumps(tokens))
     return True
 
 
 def gen_token():
-    with open(tokens_file, 'r') as f:
+    with open(tokens_path, 'r') as f:
         tokens = json.loads(f.read())
     token = token_hex(32)
     tokens.append(token)
-    with open(tokens_file, 'w') as f:
+    with open(tokens_path, 'w') as f:
         f.write(json.dumps(tokens))
     return token
 
