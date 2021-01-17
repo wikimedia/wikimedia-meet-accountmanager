@@ -8,7 +8,7 @@ import requests
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
-clients = ['http://jitsi.meet.eqiad.wmflabs:4000']
+clients = ['http://jitsi03.meet.eqiad1.wikimedia.cloud:4000']
 current_dir = os.path.dirname(os.path.realpath(__file__))
 tokens_path = os.path.join(current_dir, 'tokens.json')
 token_path = os.path.join(current_dir, 'token')
