@@ -6,6 +6,8 @@ __pycache__/
 # Naughty
 token
 salt
+tokens.json
+users_to_create.json
 
 # C extensions
 *.so
